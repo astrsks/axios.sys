@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <title>Axios | Creative Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-primary: #0a0e27;
+            --bg-secondary: #141b3d;
+            --accent-primary: #00f0ff;
+            --accent-secondary: #7b2ff7;
+            --text-primary: #e0e6ed;
+            --text-secondary: #a0a8b5;
+            --border-color: rgba(0, 240, 255, 0.2);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Enhanced Animated Background */
+        .bg-animation {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            opacity: 0.3;
+            overflow: hidden;
+        }
+
+        .grid-line {
+            position: absolute;
+            background: linear-gradient(90deg, transparent, var(--accent-primary), transparent);
+            height: 1px;
+            width: 100%;
+            animation: scan 8s linear infinite;
+        }
+
+        .grid-line:nth-child(2) { animation-delay: 2s; top: 33%; }
+        .grid-line:nth-child(3) { animation-delay: 4s; top: 66%; }
+
+        .floating-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--accent-primary);
+            border-radius: 50%;
+            animation: float 15s infinite;
+            opacity: 0.6;
+            box-shadow: 0 0 10px var(--accent-primary);
+        }
+
+        .floating-particle:nth-child(4) { left: 10%; animation-duration: 12s; }
+        .floating-particle:nth-child(5) { left: 30%; animation-duration: 18s; animation-delay: 2s; }
+        .floating-particle:nth-child(6) { left: 50%; animation-duration: 14s; animation-delay: 4s; }
+        .floating-particle:nth-child(7) { left: 70%; animation-duration: 16s; animation-delay: 1s; }
+        .floating-particle:nth-child(8) { left: 90%; animation-duration: 13s; animation-delay: 3s; }
+
+        @keyframes scan {
+            0% { transform: translateY(0); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateY(100vh); opacity: 0; }
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) translateX(0); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            50% { transform: translateY(0) translateX(50px); }
+        }
+
+        /* Header */
+        header {
+            position: relative;
+            z-index: 10;
+            padding: 1.5rem 0;
+            border-bottom: 1px solid var(--border-color);
+            backdrop-filter: blur(10px);
+            background: rgba(10, 14, 39, 0.8);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-primary);
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+            font-family: 'Courier New', monospace;
+            letter-spacing: 2px;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            z-index: 10;
+            min-height: 70vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 4rem 0;
+        }
+
+        .hero-content h1 {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: glow 2s ease-in-out infinite alternate;
+            font-weight: 900;
+            letter-spacing: 8px;
+        }
+
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.5)); }
+            to { filter: drop-shadow(0 0 40px rgba(123, 47, 247, 0.8)); }
+        }
+
+        .hero-content .tagline {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            letter-spacing: 3px;
+        }
+
+        .terminal {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2.5rem;
+            text-align: left;
+            max-width: 650px;
+            margin-left: auto;
+            margin-right: auto;
+            box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .terminal-header {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            align-items: center;
+        }
+
+        .terminal-btn {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+
+        .terminal-btn:hover {
+            transform: scale(1.2);
+        }
+
+        .terminal-btn.red { background: #ff5f56; box-shadow: 0 0 10px #ff5f56; }
+        .terminal-btn.yellow { background: #ffbd2e; box-shadow: 0 0 10px #ffbd2e; }
+        .terminal-btn.green { background: #27c93f; box-shadow: 0 0 10px #27c93f; }
+
+        .terminal-title {
+            margin-left: auto;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-family: 'Courier New', monospace;
+        }
+
+        .terminal-content {
+            font-family: 'Courier New', monospace;
+            font-size: 0.95rem;
+            line-height: 1.8;
+        }
+
+        .terminal-line {
+            margin: 0.75rem 0;
+        }
+
+        .prompt { 
+            color: var(--accent-primary); 
+            font-weight: bold;
+        }
+        
+        .output { 
+            color: var(--text-secondary); 
+        }
+
+        /* Section Styles */
+        section {
+            position: relative;
+            z-index: 10;
+            padding: 5rem 0;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 2.5rem;
+            color: var(--accent-primary);
+            position: relative;
+            display: inline-block;
+            font-weight: 700;
+        }
+
+        .section-title::before {
+            content: '//';
+            margin-right: 0.75rem;
+            color: var(--accent-secondary);
+            font-weight: 900;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 50%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), transparent);
+        }
+
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-bottom: 2rem;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 50px rgba(0, 240, 255, 0.3);
+            border-color: var(--accent-primary);
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .info-item {
+            background: rgba(20, 27, 61, 0.6);
+            padding: 2rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--accent-primary);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .info-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.05), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .info-item:hover::before {
+            opacity: 1;
+        }
+
+        .info-item:hover {
+            transform: translateX(5px);
+            border-left-color: var(--accent-secondary);
+        }
+
+        .info-label {
+            color: var(--accent-secondary);
+            font-weight: bold;
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        /* BFA Section Enhanced */
+        .bfa-card {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.08), rgba(123, 47, 247, 0.08));
+            border: 2px solid var(--accent-primary);
+            border-radius: 16px;
+            padding: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bfa-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        .bfa-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .bfa-header {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .bfa-icon {
+            font-size: 3.5rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .bfa-title {
+            color: var(--accent-primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+        }
+
+        .bfa-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .bfa-item {
+            display: flex;
+            align-items: start;
+            gap: 1.5rem;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+
+        .bfa-item:hover {
+            background: rgba(0, 240, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .bfa-bullet {
+            color: var(--accent-primary);
+            font-size: 1.8rem;
+            font-weight: bold;
+            min-width: 20px;
+        }
+
+        .bfa-text {
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+
+        .interests-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.25rem;
+            margin-top: 1.5rem;
+        }
+
+        .interest-tag {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.15), rgba(123, 47, 247, 0.15));
+            border: 1px solid var(--border-color);
+            padding: 0.75rem 1.75rem;
+            border-radius: 30px;
+            color: var(--accent-primary);
+            transition: all 0.3s;
+            font-weight: 600;
+            font-size: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interest-tag::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .interest-tag:hover::before {
+            left: 100%;
+        }
+
+        .interest-tag:hover {
+            transform: scale(1.1) translateY(-3px);
+            box-shadow: 0 5px 25px rgba(0, 240, 255, 0.4);
+            border-color: var(--accent-primary);
+        }
+
+        .dni-section {
+            background: linear-gradient(135deg, rgba(255, 59, 48, 0.12), rgba(255, 59, 48, 0.05));
+            border: 2px solid rgba(255, 59, 48, 0.4);
+            border-radius: 16px;
+            padding: 2.5rem;
+            margin-top: 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dni-section::before {
+            content: '⚠';
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            font-size: 8rem;
+            opacity: 0.05;
+        }
+
+        .dni-section h3 {
+            color: #ff3b30;
+            margin-bottom: 1rem;
+            font-size: 1.4rem;
+            font-weight: 700;
+            text-shadow: 0 0 20px rgba(255, 59, 48, 0.3);
+        }
+
+        .dni-section p {
+            color: var(--text-primary);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        footer {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border-color);
+            margin-top: 5rem;
+            color: var(--text-secondary);
+            background: rgba(10, 14, 39, 0.5);
+            backdrop-filter: blur(10px);
+        }
+
+        footer p {
+            font-size: 0.95rem;
+        }
+
+        #backToTop {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 36px;
+            height: 36px;
+            z-index: 100;
+            background: var(--accent-primary);
+            color: var(--bg-primary);
+            border: none;
+            outline: none;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 240, 255, 0.5);
+            transition: all 0.3s ease;
+            opacity: 0;
+            pointer-events: none; /* hidden by default */
+        }
+
+        #backToTop:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0, 240, 255, 0.7);
+        }
+
+        #backToTop.show {
+            opacity: 1;
+            pointer-events: auto; /* show when scrolling */
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 3rem;
+                letter-spacing: 4px;
+            }
+
+            .hero-content .tagline {
+                font-size: 1.2rem;
+                letter-spacing: 2px;
+            }
+
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            .bfa-card {
+                padding: 1.5rem;
+            }
+
+            .bfa-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+
+            .bfa-item {
+                flex-direction: column;
+                gap: 0.75rem;
+                padding: 1rem;
+            }
+
+            .bfa-item:hover {
+                transform: translateX(0) translateY(-5px);
+            }
+
+            .terminal {
+                padding: 1rem;
+            }
+
+            .terminal-content {
+                font-size: 0.85rem;
+            }
+
+            .interests-list {
+                gap: 0.75rem;
+            }
+
+            .interest-tag {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.9rem;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            footer {
+                padding: 2rem 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-content h1 {
+                font-size: 2.2rem;
+                letter-spacing: 2px;
+            }
+
+            .hero-content .tagline {
+                font-size: 1rem;
+                letter-spacing: 1px;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .card {
+                padding: 1.25rem;
+            }
+
+            .terminal-content {
+                font-size: 0.75rem;
+            }
+
+            .bfa-icon {
+                font-size: 2.5rem;
+            }
+
+            .bfa-title {
+                font-size: 1.2rem;
+            }
+
+            .logo {
+                font-size: 1.2rem;
+                letter-spacing: 1px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation">
+        <div class="grid-line"></div>
+        <div class="grid-line"></div>
+        <div class="grid-line"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+        <div class="floating-particle"></div>
+    </div>
+
+    <header>
+        <nav class="container">
+            <div class="logo">axios.sys</div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>AXIOS</h1>
+                <p class="tagline">@694soKieN</p>
+                
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <div class="terminal-btn red"></div>
+                        <div class="terminal-btn yellow"></div>
+                        <div class="terminal-btn green"></div>
+                        <div class="terminal-title">axios@terminal</div>
+                    </div>
+                    <div class="terminal-content">
+                        <div class="terminal-line"><span class="prompt">$</span> <span class="output">whoami</span></div>
+                        <div class="terminal-line"><span class="output">Axios | Legal age | He/Him</span></div>
+                        <div class="terminal-line"><span class="prompt">$</span> <span class="output">cat bio.txt</span></div>
+                        <div class="terminal-line"><span class="output">professional overthinker, part-time stoner</span></div>
+                        <div class="terminal-line"><span class="prompt">$</span> <span class="output">status --current</span></div>
+                        <div class="terminal-line"><span class="output">online | processing ██████████</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="bfa" class="container">
+        <h2 class="section-title">Before You Add or Accept</h2>
+        <div class="bfa-card">
+            <div class="bfa-content">
+                <div class="bfa-header">
+                    <div class="bfa-icon">⚠️</div>
+                    <div class="bfa-title">Quick Heads Up!</div>
+                </div>
+                <div class="bfa-list">
+                    <div class="bfa-item">
+                        <span class="bfa-bullet">•</span>
+                        <p class="bfa-text">I post art, writing, and occasional (?) brain soup</p>
+                    </div>
+                    <div class="bfa-item">
+                        <span class="bfa-bullet">•</span>
+                        <p class="bfa-text">My page: 10% idk, 90% nonsense</p>
+                    </div>
+                    <div class="bfa-item">
+                        <span class="bfa-bullet">•</span>
+                        <p class="bfa-text">If I overshare… no I didn't</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="interests" class="container">
+        <h2 class="section-title">Interests</h2>
+        <div class="card">
+            <div class="interests-list">
+                <span class="interest-tag">📚 Reading</span>
+                <span class="interest-tag">✍️ Writing</span>
+                <span class="interest-tag">🎨 Digital Art</span>
+                <span class="interest-tag">🖌️ Traditional Art</span>
+                <span class="interest-tag">🎸 Guitar</span>
+                <span class="interest-tag">📺 Watching</span>
+                <span class="interest-tag">🎮 Gaming</span>
+            </div>
+        </div>
+
+        <div class="dni-section">
+            <h3>⚠️ DNI (Do Not Interact)</h3>
+            <p>Basic DNI criteria applies. Please be respectful and mindful in all interactions.</p>
+        </div>
+    </section>
+
+    <section id="contacts" class="container">
+    <h2 class="section-title">Contacts</h2>
+    <div class="card" style="display: flex; gap: 1.5rem; justify-content: center; flex-wrap: wrap;">
+        <a href="https://www.tumblr.com/alstrsk" target="_blank">
+        <i class="fab fa-tumblr fa-2x"></i>
+        </a>
+        <a href="https://www.instagram.com/alstrsk" target="_blank">
+        <i class="fab fa-instagram fa-2x"></i>
+        </a>
+        <a href="https://www.tiktok.com/@gnshnmpcthyv" target="_blank">
+        <i class="fab fa-tiktok fa-2x"></i>
+        </a>
+        <!-- <a href="mailto:your.email@example.com" target="_blank">
+        <i class="fas fa-envelope fa-2x"></i>
+        </a> -->
+        <a href="https://discord.com/channels/@alstrsk" target="_blank">
+        <i class="fab fa-discord fa-2x"></i>
+        </a>
+    </div>
+    </section>
+
+    <!-- <section id="portfolio" class="container">
+    <h2 class="section-title">Portfolio</h2>
+    <div class="info-grid">
+        <div class="card">
+        <h3>Digital Painting #1</h3>
+        <p>A futuristic cyberpunk cityscape I made in Procreate.</p>
+        </div>
+        <div class="card">
+        <h3>Short Story: "Lost in Thought"</h3>
+        <p>A piece exploring identity and mental chaos.</p>
+        </div>
+        <div class="card">
+        <h3>Guitar Cover</h3>
+        <p>Cover of a classic rock song, recorded in my home studio.</p>
+        </div>
+    </div>
+    </section> -->
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Axios. All rights reserved.</p>
+        </div>
+    </footer>
+    <button id="backToTop" title="Back to Top">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M12 4L12 20M12 4L5 11M12 4L19 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    </button>
+    <script>
+        const backToTopBtn = document.getElementById('backToTop');
+
+        // Show button after scrolling 300px
+        window.onscroll = function() {
+            if (document.body.scrollTop > 300 || document.documentElement.scrollTop > 300) {
+                backToTopBtn.classList.add('show');
+            } else {
+                backToTopBtn.classList.remove('show');
+            }
+        };
+
+        // Scroll smoothly to top on click
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+    </script>
+</body>
+</html>
